@@ -8,6 +8,7 @@ class TicTacToeMain:
         self.current_player = "X"
         self.board = [["" for _ in range(3)] for _ in range(3)]
         self.buttons = []
+        self.result_dialog = None  # Instance variable to store the result dialog
 
         for i in range(3):
             row_buttons = []
@@ -24,11 +25,9 @@ class TicTacToeMain:
             self.buttons[row][col].config(text=self.current_player)
             
             if self.check_winner():
-                messagebox.showinfo("Winner", f"Player {self.current_player} wins!")
-                self.reset_game()
+                self.show_game_result(f"Player {self.current_player} wins!")
             elif self.is_board_full():
-                messagebox.showinfo("Tie", "It's a tie!")
-                self.reset_game()
+                self.show_game_result("It's a tie!")
             else:
                 self.current_player = "O" if self.current_player == "X" else "X"
 
@@ -39,7 +38,6 @@ class TicTacToeMain:
                 return True
             if self.board[0][i] == self.board[1][i] == self.board[2][i] != "":
                 return True
-            
         if self.board[0][0] == self.board[1][1] == self.board[2][2] != "":
             return True
         if self.board[0][2] == self.board[1][1] == self.board[2][0] != "":
@@ -59,6 +57,20 @@ class TicTacToeMain:
         for row_buttons in self.buttons:
             for button in row_buttons:
                 button.config(text="")
+
+    def show_game_result(self, message):
+        self.result_dialog = gui.Toplevel(self.root)
+        self.result_dialog.title("Game Result")
+
+        message_label = gui.Label(self.result_dialog, text=message)
+        message_label.pack()
+
+        reset_button = gui.Button(self.result_dialog, text="Reset", command=self.reset_and_close)
+        reset_button.pack()
+
+    def reset_and_close(self):
+        self.reset_game()
+        self.result_dialog.destroy()  # Destroy the result dialog
 
     def run(self):
         self.root.mainloop()
