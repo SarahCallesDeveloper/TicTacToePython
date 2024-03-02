@@ -28,6 +28,9 @@ class TicTacToeMain:
         reset_button = gui.Button(button_container, text="Reset", command=self.reset_and_show_message)
         reset_button.pack(side=gui.LEFT, padx=5)
 
+        home_button = gui.Button(button_container, text="Home")  # Home button without functionality
+        home_button.pack(side=gui.LEFT, padx=5)
+
         quit_button = gui.Button(button_container, text="Quit", command=self.quit_and_show_message)
         quit_button.pack(side=gui.RIGHT, padx=5)
 
