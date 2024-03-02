@@ -22,12 +22,16 @@ class TicTacToeMain:
                 row_buttons.append(button)
             self.buttons.append(row_buttons)
         
-        # Adding two additional buttons
-        reset_button = gui.Button(self.root, text="Reset", command=self.reset_game)
-        reset_button.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
+        # Container frame for buttons
+        button_container = gui.Frame(self.root)
+        button_container.grid(row=3, column=0, columnspan=3, pady=10)
         
-        quit_button = gui.Button(self.root, text="Quit", command=self.root.quit)
-        quit_button.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
+        # Adding two additional buttons inside the container
+        reset_button = gui.Button(button_container, text="Reset", command=self.reset_game)
+        reset_button.pack(side=gui.LEFT, padx=5)
+        
+        quit_button = gui.Button(button_container, text="Quit", command=self.root.quit)
+        quit_button.pack(side=gui.RIGHT, padx=5)
 
     def make_move(self, row, col):
         if self.board[row][col] == "":
