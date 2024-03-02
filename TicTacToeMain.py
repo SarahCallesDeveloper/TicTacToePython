@@ -1,15 +1,18 @@
-import tkinter as gui #Graphical User Interface
+import tkinter as gui # Graphical User Interface
 from tkinter import messagebox
 
 class TicTacToeMain:
     def __init__(self):
         self.root = gui.Tk()
         self.root.title("Tic Tac Toe")
+        self.root.geometry("350x450")  # Setting initial window size
+        
         self.current_player = "X"
         self.board = [["" for _ in range(3)] for _ in range(3)]
         self.buttons = []
         self.result_dialog = None  # Instance variable to store the result dialog
-
+        
+        # Creating buttons for the Tic Tac Toe grid
         for i in range(3):
             row_buttons = []
             for j in range(3):
@@ -18,6 +21,13 @@ class TicTacToeMain:
                 button.grid(row=i, column=j, padx=5, pady=5)
                 row_buttons.append(button)
             self.buttons.append(row_buttons)
+        
+        # Adding two additional buttons
+        reset_button = gui.Button(self.root, text="Reset", command=self.reset_game)
+        reset_button.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
+        
+        quit_button = gui.Button(self.root, text="Quit", command=self.root.quit)
+        quit_button.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
 
     def make_move(self, row, col):
         if self.board[row][col] == "":
