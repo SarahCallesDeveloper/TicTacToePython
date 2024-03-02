@@ -1,52 +1,55 @@
-import tkinter as gui # Graphical User Interface
+import tkinter as gui  # Graphical User Interface
 from tkinter import messagebox
 
 class TicTacToeMain:
     def __init__(self):
         self.root = gui.Tk()
         self.root.title("Tic Tac Toe")
-        self.root.geometry("350x450")  # Setting initial window size
-        
+        self.root.geometry("350x450") 
         self.current_player = "X"
         self.board = [["" for _ in range(3)] for _ in range(3)]
         self.buttons = []
-        self.result_dialog = None  # Instance variable to store the result dialog
-        
-        # Creating buttons for the Tic Tac Toe grid
+        self.text_below_buttons = gui.Label()
+        game_container = gui.Frame(self.root)
+        game_container.pack(expand=True, fill=gui.BOTH, padx=10, pady=10)
+
         for i in range(3):
             row_buttons = []
             for j in range(3):
-                button = gui.Button(self.root, text="", font=("Helvetica", 24), width=5, height=2,
-                                   command=lambda row=i, col=j: self.make_move(row, col))
+                button = gui.Button(game_container, text="", font=("Helvetica", 24), width=5, height=2,
+                                    command=lambda row=i, col=j: self.make_move(row, col))
                 button.grid(row=i, column=j, padx=5, pady=5)
                 row_buttons.append(button)
             self.buttons.append(row_buttons)
-        
-        # Container frame for buttons
-        button_container = gui.Frame(self.root)
+
+        button_container = gui.Frame(game_container)
         button_container.grid(row=3, column=0, columnspan=3, pady=10)
-        
-        # Adding two additional buttons inside the container
-        reset_button = gui.Button(button_container, text="Reset", command=self.reset_game)
+
+        reset_button = gui.Button(button_container, text="Reset", command=self.reset_and_show_message)
         reset_button.pack(side=gui.LEFT, padx=5)
-        
-        quit_button = gui.Button(button_container, text="Quit", command=self.root.quit)
+
+        quit_button = gui.Button(button_container, text="Quit", command=self.quit_and_show_message)
         quit_button.pack(side=gui.RIGHT, padx=5)
+
+        self.text_below_buttons = gui.Label(game_container, text="")
+        self.text_below_buttons.grid(row=4, column=0, columnspan=3)
+
+        game_container.place(relx=0.5, rely=0.5, anchor=gui.CENTER)
 
     def make_move(self, row, col):
         if self.board[row][col] == "":
             self.board[row][col] = self.current_player
             self.buttons[row][col].config(text=self.current_player)
-            
+
             if self.check_winner():
-                self.show_game_result(f"Player {self.current_player} wins!")
+                self.text_below_buttons.config(text=f"Player {self.current_player} is the winner!")
             elif self.is_board_full():
-                self.show_game_result("It's a tie!")
+                self.text_below_buttons.config(text="It's a tie!")
             else:
                 self.current_player = "O" if self.current_player == "X" else "X"
 
     def check_winner(self):
-        
+
         for i in range(3):
             if self.board[i][0] == self.board[i][1] == self.board[i][2] != "":
                 return True
@@ -71,20 +74,13 @@ class TicTacToeMain:
         for row_buttons in self.buttons:
             for button in row_buttons:
                 button.config(text="")
+        self.text_below_buttons.config(text="")
 
-    def show_game_result(self, message):
-        self.result_dialog = gui.Toplevel(self.root)
-        self.result_dialog.title("Game Result")
-
-        message_label = gui.Label(self.result_dialog, text=message)
-        message_label.pack()
-
-        reset_button = gui.Button(self.result_dialog, text="Reset", command=self.reset_and_close)
-        reset_button.pack()
-
-    def reset_and_close(self):
+    def reset_and_show_message(self):
         self.reset_game()
-        self.result_dialog.destroy()  # Destroy the result dialog
+
+    def quit_and_show_message(self):
+        self.root.quit()
 
     def run(self):
         self.root.mainloop()
