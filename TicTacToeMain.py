@@ -169,25 +169,54 @@ class TicTacToeMain:
         self.create_computer_game_page()
         self.game_container.pack()  
     def computer_move(self):
-        middle_square = (1, 1)
+        # Check for winning moves
+        middle_square=[1,1]
         if self.board[middle_square[0]][middle_square[1]] == "":
             row, col = middle_square
+            self.board[row][col] = self.current_player
+            self.update_ui(row, col)
         else:
-            # If the middle square is not empty, choose randomly from other empty cells
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == "":
+                        # Check if the current cell can lead to a win for the computer
+                        self.board[i][j] = self.current_player
+                        if self.check_winner():
+                            self.update_ui(i, j)
+                            return
+                        else:
+                            # If not, revert the change
+                            self.board[i][j] = ""
+
+            # Check for winning moves of the opponent and block them
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == "":
+                        # Check if the current cell can lead to a win for the opponent
+                        self.board[i][j] = "X" if self.current_player == "O" else "O"
+                        if self.check_winner():
+                            self.board[i][j] = self.current_player
+                            self.update_ui(i, j)
+                            return
+                        else:
+                            # If not, revert the change
+                            self.board[i][j] = ""
+
+            # If no winning moves, choose a random empty cell
             empty_cells = [(i, j) for i in range(3) for j in range(3) if self.board[i][j] == ""]
             if empty_cells:
                 row, col = random.choice(empty_cells)
-            else:
-                # Handle the case when there are no empty cells left
-                return
-        self.board[row][col] = self.current_player
+                self.board[row][col] = self.current_player
+                self.update_ui(row, col)
+
+    def update_ui(self, row, col):
         self.buttons[row][col].config(text=self.current_player)
         if self.check_winner():
             self.text_below_buttons.config(text=f"Player {self.current_player} is the winner!")
         elif self.is_board_full():
             self.text_below_buttons.config(text="It's a tie!")
         else:
-            self.current_player = "X"
+            self.current_player = "X" if self.current_player == "O" else "O"
     
     def run(self):
         self.root.mainloop()
