@@ -1,6 +1,7 @@
 import tkinter as gui 
 from tkinter import messagebox
 import random 
+import time
 class TicTacToeMain:
     def __init__(self):
         self.root = gui.Tk()
@@ -120,7 +121,8 @@ class TicTacToeMain:
                 else:
                     self.current_player = "O" if self.current_player == "X" else "X"
                     if self.current_player == "O":
-                        self.computer_move()
+                        
+                       self.root.after(500, self.computer_move)
             
     def check_winner(self):
         for i in range(3):
