@@ -6,10 +6,6 @@ class TicTacToeMain:
         self.root = gui.Tk()
         self.root.title("Tic Tac Toe")
         self.root.geometry("350x450") 
-        self.current_player = "X"
-        self.board = [["" for _ in range(3)] for _ in range(3)]
-        self.buttons = []
-        self.text_below_buttons = gui.Label()
         self.game_container = gui.Frame(self.root)
         self.home_container = gui.Frame(self.root)
         
@@ -17,6 +13,12 @@ class TicTacToeMain:
         self.show_home_page()
 
     def create_game_page(self):
+        
+        self.current_player = "X"
+        self.board = [["" for _ in range(3)] for _ in range(3)]
+        self.buttons = []
+        self.text_below_buttons = gui.Label()
+        
         if hasattr(self, 'game_container'):
             self.game_container.destroy()
         
